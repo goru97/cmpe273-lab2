@@ -36,26 +36,45 @@ function get(request, response) {
 };
 
 function post(request, response) {
-	// TODO: read 'name and email from the request.body'
-	// var newSessionId = login.login('xxx', 'xxx@gmail.com');
-	// TODO: set new session id to the 'session_id' cookie in the response
-	// replace "Logged In" response with response.end(login.hello(newSessionId));
-
-	response.end("Logged In\n");
+	//  read 'name and email from the request.body'
+var newSessionId = login.login(request.body.name, request.body.email);
+	
+	//  set new session id to the 'session_id' cookie in the response
+        
+ response.writeHead(200, {
+          'Content-Type': 'text/plain', 
+          'Set-Cookie: session_id=': newSessionId
+        
+ });
+ // replace "Logged In" response with response.end(login.hello(newSessionId));
+	response.end(login.hello(newSessionId));
+   //     var jSon = request.body;
+//response.end('hello '+jSon.name);
 };
 
 function del(request, response) {
 	console.log("DELETE:: Logout from the server");
  	// TODO: remove session id via login.logout(xxx)
  	// No need to set session id in the response cookies since you just logged out!
+var cookies = request.cookies;
+
+login.logout(cookies['session_id']);
 
   	response.end('Logged out from the server\n');
 };
 
 function put(request, response) {
 	console.log("PUT:: Re-generate new seesion_id for the same user");
-	// TODO: refresh session id; similar to the post() function
+	//   refresh session id; similar to the post() function
+	var cookies = request.cookies;
 
+  var newSessionId = login.refresh(cookies['session_id']);
+      
+       response.writeHead(200, {
+          'Content-Type': 'text/plain', 
+          'Set-Cookie: session_id=': newSessionId
+        
+ });
 	response.end("Re-freshed session id\n");
 };
 

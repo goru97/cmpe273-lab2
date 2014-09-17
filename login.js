@@ -43,8 +43,23 @@ Login.prototype.login = function(_name, _email) {
 Login.prototype.logout = function(sessionId) {
 	console.log('logout::' + sessionId);
    /*
-	* TODO: Remove the given sessionId from the sessionMap
+	* Remove the given sessionId from the sessionMap
 	*/
+
+	delete this.sessionMap[sessionId];
+};
+
+Login.prototype.refresh = function(_sessionId) {
+   /*
+	* Refresh the existing session Id
+	*@author: Gaurav Bajaj
+	*@version:0.1.1
+	*/
+	var sessionId = new Date().getTime();
+
+	this.sessionMap[sessionId] = this.sessionMap[_sessionId];
+	delete this.sessionMap[_sessionId];
+	return sessionId;
 };
 
 // Export the Login class
